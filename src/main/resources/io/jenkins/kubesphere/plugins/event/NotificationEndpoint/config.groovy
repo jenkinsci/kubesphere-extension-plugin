@@ -4,7 +4,7 @@ import io.jenkins.kubesphere.plugins.event.Notification
 def f=namespace(lib.FormTagLib)
 def st=namespace("jelly:stapler")
 
-st.include(it:instance, 'class':descriptor.clazz, page:"global-advanced", optional:true)
+st.include(it:instance, 'class':descriptor.clazz, page:"config-advanced", optional:true)
 f.advanced {
 	events = instance?.events ?: [:]
 	f.optionalBlock(name:"events", title:_("All Events"), negative:true, checked:events.isEmpty()) {
@@ -18,7 +18,7 @@ f.advanced {
 						f.nested {
 							table(width:"100%") {
 								set('instance', events.get(endpoint))
-								st.include(it:instance, 'class':descriptor.clazz, page:"global-advanced-endpoint", optional:true)
+								st.include(it:instance, 'class':descriptor.clazz, page:"config-advanced-endpoint", optional:true)
 							}
 						}
 					}

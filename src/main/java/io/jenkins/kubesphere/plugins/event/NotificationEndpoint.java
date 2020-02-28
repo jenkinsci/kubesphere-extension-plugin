@@ -20,10 +20,7 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
     private static final Logger LOGGER = Logger.getLogger(NotificationEndpoint.class.getName());
 
     public static DescriptorExtensionList<NotificationEndpoint, Descriptor<NotificationEndpoint>> all() {
-        LOGGER.warning(String.valueOf(Jenkins.get().getDescriptorList(NotificationEndpoint.class)));
-        LOGGER.warning(String.valueOf(Jenkins.get().getDescriptorList(NotificationEndpoint.class).size()));
         return Jenkins.get().getDescriptorList(NotificationEndpoint.class);
-
     }
 
     public abstract void notify(Notification.Event event);
