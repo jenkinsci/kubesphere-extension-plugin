@@ -15,14 +15,18 @@ import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
+import java.util.logging.Logger;
 
 import static hudson.init.InitMilestone.PLUGINS_STARTED;
 
+/**
+ * @author runzexia
+ */
 @Extension
 @Symbol("kubesphere-event-notifacation")
 public class Notification implements Describable<Notification> {
 
+    private static final Logger LOGGER = Logger.getLogger(Notification.class.getName());
     static final String JENKINS_JOB_STARTED = "jenkins.job.started";
 
     static final String JENKINS_JOB_COMPLETED = "jenkins.job.completed";
@@ -37,17 +41,18 @@ public class Notification implements Describable<Notification> {
 
     @Override
     public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl) Objects.requireNonNull(Jenkins.getInstanceOrNull()).getDescriptorOrDie(getClass());
+        return (DescriptorImpl) Jenkins.get().getDescriptorOrDie(getClass());
     }
 
     private static Notification instance;
 
     @Initializer(after = PLUGINS_STARTED)
     public static void init() {
-        instance = new Notification();
+        instance = Jenkins.get().getExtensionList(Notification.class).get(0);
     }
 
     public static void notify(Event event) {
+
         if (instance != null) {
             instance._notify(event);
         }

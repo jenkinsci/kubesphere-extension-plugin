@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 public abstract class NotificationEndpoint extends AbstractDescribableImpl<NotificationEndpoint> implements ExtensionPoint {
@@ -19,7 +20,9 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
     private static final Logger LOGGER = Logger.getLogger(NotificationEndpoint.class.getName());
 
     public static DescriptorExtensionList<NotificationEndpoint, Descriptor<NotificationEndpoint>> all() {
-        return Jenkins.getInstance().getDescriptorList(NotificationEndpoint.class);
+        LOGGER.warning(String.valueOf(Jenkins.get().getDescriptorList(NotificationEndpoint.class)));
+        LOGGER.warning(String.valueOf(Jenkins.get().getDescriptorList(NotificationEndpoint.class).size()));
+        return Jenkins.get().getDescriptorList(NotificationEndpoint.class);
 
     }
 
