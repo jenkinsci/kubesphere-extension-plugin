@@ -1,3 +1,17 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.jenkins.kubesphere.plugins.event;
 
 import com.google.common.collect.Maps;
@@ -12,12 +26,12 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 public abstract class NotificationEndpoint extends AbstractDescribableImpl<NotificationEndpoint> implements ExtensionPoint {
 
     private static final Logger LOGGER = Logger.getLogger(NotificationEndpoint.class.getName());
+    private Map<String, EndpointEvent> events = Maps.newHashMap();
 
     public static DescriptorExtensionList<NotificationEndpoint, Descriptor<NotificationEndpoint>> all() {
         return Jenkins.get().getDescriptorList(NotificationEndpoint.class);
@@ -27,12 +41,14 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
 
     public abstract void notify(Notification.Event event, EndpointEvent endpointEvent);
 
-    private Map<String, EndpointEvent> events = Maps.newHashMap();
-
     public Map<String, EndpointEvent> getEvents() {
         return events;
     }
 
+
+    public interface EndpointEventCustom {
+
+    }
 
     public abstract static class DescriptorImpl extends Descriptor<NotificationEndpoint> {
 
@@ -58,8 +74,8 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
                     eventArray.add(events.getJSONObject("event"));
                 }
                 for (Object event : eventArray) {
-                    final String endpoint = ((JSONObject)event).getString("endpoint");
-                    final EndpointEventCustom custom = parseCustom(((JSONObject)event));
+                    final String endpoint = ((JSONObject) event).getString("endpoint");
+                    final EndpointEventCustom custom = parseCustom(((JSONObject) event));
                     instance.getEvents().put(endpoint, new EndpointEvent(custom));
                 }
             }
@@ -72,14 +88,13 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
 
     }
 
-    public interface EndpointEventCustom {
-
-    }
     public static class EndpointEvent {
         private final EndpointEventCustom custom;
+
         public EndpointEvent(EndpointEventCustom custom) {
             this.custom = custom;
         }
+
         public EndpointEventCustom getCustom() {
             return custom;
         }

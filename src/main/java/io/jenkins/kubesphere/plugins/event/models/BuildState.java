@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,6 @@
 package io.jenkins.kubesphere.plugins.event.models;
 
 import hudson.EnvVars;
-
 import hudson.model.Job;
 import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;
@@ -33,31 +32,6 @@ import static io.jenkins.kubesphere.plugins.event.Utils.verifyNotEmpty;
  */
 public class BuildState {
 
-    private String fullUrl;
-
-    private int number;
-
-    private long queueId;
-
-    private JobPhase phase;
-
-    private long timestamp;
-
-    private String status;
-
-    private String url;
-
-    private String displayName;
-
-    private ScmState scm;
-
-    private Map<String, String> parameters;
-
-    private TestState testSummary;
-
-
-
-
     /**
      *  Map of artifacts: file name => Map of artifact locations ( location name => artifact URL )
      *  ---
@@ -68,6 +42,53 @@ public class BuildState {
      *     archive: http://localhost:8080/job/notification-plugin/78/artifact/target/notification.jar
      */
     private final Map<String, Map<String, String>> artifacts = new HashMap<String, Map<String, String>>();
+    private String fullUrl;
+    private int number;
+    private long queueId;
+    private JobPhase phase;
+    private long timestamp;
+    private String status;
+    private String url;
+    private String displayName;
+    private ScmState scm;
+    private Map<String, String> parameters;
+    private TestState testSummary;
+
+    private BuildState() {
+    }
+
+    public BuildState(JobPhase phase, Run run, long timestamp) {
+        Jenkins jenkins = Jenkins.getInstanceOrNull();
+        String rootUrl = null;
+        if (jenkins != null) {
+            rootUrl = jenkins.getRootUrl();
+        }
+        Result result = run.getResult();
+        setNumber(run.number);
+        setQueueId(run.getQueueId());
+        setUrl(run.getUrl());
+        setPhase(phase);
+        setTimestamp(timestamp);
+        if (result != null) {
+            setStatus(result.toString());
+        }
+
+        if (rootUrl != null) {
+            setFullUrl(rootUrl + run.getUrl());
+        }
+
+        ParametersAction paramsAction = run.getAction(ParametersAction.class);
+        if (paramsAction != null) {
+            EnvVars env = new EnvVars();
+            for (ParameterValue value : paramsAction.getParameters()) {
+                if (!value.isSensitive()) {
+                    value.buildEnvironment(run, env);
+                }
+            }
+            setParameters(env);
+        }
+        updateArtifacts(run.getParent(), run);
+    }
 
     public int getNumber() {
         return number;
@@ -122,32 +143,28 @@ public class BuildState {
     }
 
     public void setParameters(Map<String, String> params) {
-        this.parameters = new HashMap<String, String>( params );
+        this.parameters = new HashMap<String, String>(params);
     }
 
-    public Map<String, Map<String, String>> getArtifacts () {
+    public Map<String, Map<String, String>> getArtifacts() {
         return artifacts;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public ScmState getScm ()
-    {
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public ScmState getScm() {
         return scm;
     }
 
-    public void setScm ( ScmState scmState )
-    {
+    public void setScm(ScmState scmState) {
         this.scm = scmState;
     }
-
-
 
     public TestState getTestSummary() {
         return testSummary;
@@ -162,27 +179,23 @@ public class BuildState {
      * @param job Job to update
      * @param run Run to update
      */
-    public void updateArtifacts (Job job, Run run )
-    {
-        updateArchivedArtifacts( run );
+    public void updateArtifacts(Job job, Run run) {
+        updateArchivedArtifacts(run);
     }
 
-
-    private void updateArchivedArtifacts ( Run run )
-    {
-        @SuppressWarnings( "unchecked" )
+    private void updateArchivedArtifacts(Run run) {
+        @SuppressWarnings("unchecked")
         List<Run.Artifact> buildArtifacts = run.getArtifacts();
 
-        if ( buildArtifacts == null ) { return; }
+        if (buildArtifacts == null) {
+            return;
+        }
 
-        for ( Run.Artifact a : buildArtifacts ) {
+        for (Run.Artifact a : buildArtifacts) {
             String artifactUrl = Jenkins.getInstance().getRootUrl() + run.getUrl() + "artifact/" + a.getHref();
-            updateArtifact( a.relativePath, "archive", artifactUrl );
+            updateArtifact(a.relativePath, "archive", artifactUrl);
         }
     }
-
-
-
 
     /**
      * Updates an artifact URL.
@@ -191,21 +204,20 @@ public class BuildState {
      * @param locationName artifact location name, like "s3" or "archive"
      * @param locationUrl  artifact URL at the location specified
      */
-    private void updateArtifact( String fileName, String locationName, String locationUrl )
-    {
-        verifyNotEmpty( fileName, locationName, locationUrl );
+    private void updateArtifact(String fileName, String locationName, String locationUrl) {
+        verifyNotEmpty(fileName, locationName, locationUrl);
 
-        if ( ! artifacts.containsKey( fileName )) {
-            artifacts.put( fileName, new HashMap<String, String>());
+        if (!artifacts.containsKey(fileName)) {
+            artifacts.put(fileName, new HashMap<String, String>());
         }
 
-        if ( artifacts.get( fileName ).containsKey( locationName )) {
-            throw new RuntimeException( String.format(
-                "Adding artifacts mapping '%s/%s/%s' - artifacts Map already contains mapping of location '%s': %s",
-                fileName, locationName, locationUrl, locationName, artifacts ));
+        if (artifacts.get(fileName).containsKey(locationName)) {
+            throw new RuntimeException(String.format(
+                    "Adding artifacts mapping '%s/%s/%s' - artifacts Map already contains mapping of location '%s': %s",
+                    fileName, locationName, locationUrl, locationName, artifacts));
         }
 
-        artifacts.get( fileName ).put( locationName, locationUrl );
+        artifacts.get(fileName).put(locationName, locationUrl);
     }
 
     public JobPhase getPhase() {
@@ -214,40 +226,5 @@ public class BuildState {
 
     public void setPhase(JobPhase phase) {
         this.phase = phase;
-    }
-    private BuildState(){
-    }
-    public BuildState(JobPhase phase, Run run){
-        Jenkins jenkins      = Jenkins.getInstanceOrNull();
-        String rootUrl = null;
-        if (jenkins != null) {
-            rootUrl = jenkins.getRootUrl();
-        }
-        Result result       = run.getResult();
-        BuildState buildState  = new BuildState();
-        buildState.setNumber( run.number );
-        buildState.setQueueId( run.getQueueId() );
-        buildState.setUrl( run.getUrl());
-        buildState.setPhase( phase );
-        buildState.setTimestamp( timestamp );
-        if ( result != null ) {
-            buildState.setStatus(result.toString());
-        }
-
-        if ( rootUrl != null ) {
-            buildState.setFullUrl(rootUrl + run.getUrl());
-        }
-
-        ParametersAction paramsAction = run.getAction(ParametersAction.class);
-        if ( paramsAction != null ) {
-            EnvVars env = new EnvVars();
-            for (ParameterValue value : paramsAction.getParameters()){
-                if ( ! value.isSensitive()) {
-                    value.buildEnvironment( run, env );
-                }
-            }
-            buildState.setParameters(env);
-        }
-        buildState.updateArtifacts( run.getParent(), run );
     }
 }

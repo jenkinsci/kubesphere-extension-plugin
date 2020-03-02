@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@ package io.jenkins.kubesphere.plugins.event.models;
 
 
 import hudson.model.Job;
-
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 
@@ -30,6 +30,28 @@ public class JobState {
     private String url;
 
     private BuildState build;
+
+    private Result previousCompletedResult;
+
+    private JobState() {
+    }
+
+    public JobState(JobPhase phase, Run run, TaskListener listener, long timestamp) throws IOException, InterruptedException {
+        Job job = run.getParent();
+        BuildState buildState = new BuildState(phase, run, timestamp);
+        ScmState scmState = new ScmState(run, listener);
+        TestState testState = new TestState(run);
+
+        setName(job.getName());
+        setDisplayName(job.getDisplayName());
+        setUrl(job.getUrl());
+        setBuild(buildState);
+
+        buildState.setScm(scmState);
+        buildState.setTestSummary(testState);
+        setPreviousCompletedResult(findLastBuildThatFinished(run));
+
+    }
 
     public String getName() {
         return name;
@@ -63,25 +85,24 @@ public class JobState {
         this.build = build;
     }
 
-    private JobState(){
+    public Result getPreviousCompletedResult() {
+        return previousCompletedResult;
     }
-    public JobState JobState(JobPhase phase, Run run, TaskListener listener, long timestamp) throws IOException, InterruptedException {
-        Job job = run.getParent();
-        JobState           jobState     = new JobState();
-        BuildState         buildState   = new BuildState(phase,run);
-        ScmState           scmState     = new ScmState(run,listener);
-        TestState          testState = new TestState(run);
 
-        jobState.setName( job.getName());
-        jobState.setDisplayName(job.getDisplayName());
-        jobState.setUrl( job.getUrl());
-        jobState.setBuild( buildState );
-
-        buildState.setScm( scmState );
-        buildState.setTestSummary(testState);
+    public void setPreviousCompletedResult(Result build){
+        this.previousCompletedResult = build;
+    }
 
 
-
-        return jobState;
+    private Result findLastBuildThatFinished(Run run){
+        Run previousRun = run.getPreviousCompletedBuild();
+        while(previousRun != null){
+            Result previousResults = previousRun.getResult();
+            if (previousResults.equals(Result.SUCCESS) || previousResults.equals(Result.FAILURE) || previousResults.equals(Result.UNSTABLE)){
+                return previousResults;
+            }
+            previousRun = previousRun.getPreviousCompletedBuild();
+        }
+        return null;
     }
 }

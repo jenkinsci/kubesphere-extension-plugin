@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,13 +24,33 @@ import java.util.List;
 /**
  * @author runzexia
  */
-public class TestState
-{
+public class TestState {
     private int total;
     private int failed;
     private int passed;
     private int skipped;
     private List<String> failedTests;
+
+    private TestState() {
+    }
+
+    public TestState(Run build) {
+
+
+        AbstractTestResultAction testAction = build.getAction(AbstractTestResultAction.class);
+        if (testAction != null) {
+            int total = testAction.getTotalCount();
+            int failCount = testAction.getFailCount();
+            int skipCount = testAction.getSkipCount();
+
+            setTotal(total);
+            setFailed(failCount);
+            setSkipped(skipCount);
+            setPassed(total - failCount - skipCount);
+            setFailedTests(getFailedTestNames(testAction));
+        }
+
+    }
 
     public int getTotal() {
         return total;
@@ -72,32 +92,12 @@ public class TestState
         this.failedTests = failedTests;
     }
 
-    private TestState(){}
-
-    public TestState (Run build){
-        TestState resultSummary = null;
-
-        AbstractTestResultAction testAction = build.getAction(AbstractTestResultAction.class);
-        if(testAction != null) {
-            int total = testAction.getTotalCount();
-            int failCount = testAction.getFailCount();
-            int skipCount = testAction.getSkipCount();
-
-            resultSummary = new TestState();
-            resultSummary.setTotal(total);
-            resultSummary.setFailed(failCount);
-            resultSummary.setSkipped(skipCount);
-            resultSummary.setPassed(total - failCount - skipCount);
-            resultSummary.setFailedTests(getFailedTestNames(testAction));
-        }
-
-    }
     private List<String> getFailedTestNames(AbstractTestResultAction testResultAction) {
         List<String> failedTests = new ArrayList<>();
 
         List<? extends TestResult> results = testResultAction.getFailedTests();
 
-        for(TestResult t : results) {
+        for (TestResult t : results) {
             failedTests.add(t.getFullName());
         }
 
