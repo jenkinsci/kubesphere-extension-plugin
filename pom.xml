@@ -37,6 +37,19 @@
             <artifactId>workflow-scm-step</artifactId>
             <version>2.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <!-- using version 1.51, because later versions of wiremock build on HttpClientBuilder introduced by httpclient-4.3. -->
+            <version>1.51</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
