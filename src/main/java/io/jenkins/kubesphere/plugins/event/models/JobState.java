@@ -31,7 +31,7 @@ public class JobState {
 
     private BuildState build;
 
-    private Result previousCompletedResult;
+    private BuildState previousCompletedBuild;
 
     private JobState() {
     }
@@ -49,7 +49,9 @@ public class JobState {
 
         buildState.setScm(scmState);
         buildState.setTestSummary(testState);
-        setPreviousCompletedResult(findLastBuildThatFinished(run));
+        Run preRun = findLastBuildThatFinished(run);
+        setPreviousCompletedBuild(new BuildState(JobPhase.COMPLETED, preRun,
+                preRun.getTimeInMillis() + preRun.getDuration()));
 
     }
 
@@ -85,21 +87,21 @@ public class JobState {
         this.build = build;
     }
 
-    public Result getPreviousCompletedResult() {
-        return previousCompletedResult;
+    public BuildState getPreviousCompletedBuild() {
+        return previousCompletedBuild;
     }
 
-    public void setPreviousCompletedResult(Result build){
-        this.previousCompletedResult = build;
+    public void setPreviousCompletedBuild(BuildState build){
+        this.previousCompletedBuild = build;
     }
 
 
-    private Result findLastBuildThatFinished(Run run){
+    private Run findLastBuildThatFinished(Run run){
         Run previousRun = run.getPreviousCompletedBuild();
         while(previousRun != null){
             Result previousResults = previousRun.getResult();
             if (previousResults.equals(Result.SUCCESS) || previousResults.equals(Result.FAILURE) || previousResults.equals(Result.UNSTABLE)){
-                return previousResults;
+                return previousRun;
             }
             previousRun = previousRun.getPreviousCompletedBuild();
         }
