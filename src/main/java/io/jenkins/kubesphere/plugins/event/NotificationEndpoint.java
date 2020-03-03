@@ -37,9 +37,9 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
         return Jenkins.get().getDescriptorList(NotificationEndpoint.class);
     }
 
-    public abstract void notify(Notification.Event event);
+    public abstract void notify(KubeSphereNotification.Event event);
 
-    public abstract void notify(Notification.Event event, EndpointEvent endpointEvent);
+    public abstract void notify(KubeSphereNotification.Event event, EndpointEvent endpointEvent);
 
     public Map<String, EndpointEvent> getEvents() {
         return events;
@@ -54,7 +54,7 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
 
         public ListBoxModel doFillEndpointsItems() {
             final ListBoxModel listBoxModel = new ListBoxModel();
-            for (String endpoint : Notification.ENDPOINTS) {
+            for (String endpoint : KubeSphereNotification.ENDPOINTS) {
                 listBoxModel.add(endpoint);
             }
             return listBoxModel;

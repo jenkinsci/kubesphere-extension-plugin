@@ -70,17 +70,17 @@ public class WebHookNotificationEndpoint extends NotificationEndpoint {
     }
 
     @Override
-    public void notify(Notification.Event event) {
+    public void notify(KubeSphereNotification.Event event) {
         requestURL(event, url);
     }
 
     @Override
-    public void notify(Notification.Event event, NotificationEndpoint.EndpointEvent endpointEvent) {
+    public void notify(KubeSphereNotification.Event event, NotificationEndpoint.EndpointEvent endpointEvent) {
         final WebHookEndpointEventCustom custom = (WebHookEndpointEventCustom) endpointEvent.getCustom();
         requestURL(event, custom == null ? this.url : custom.getURL());
     }
 
-    private void requestURL(Notification.Event event, String url) {
+    private void requestURL(KubeSphereNotification.Event event, String url) {
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpPost method = new HttpPost(url);
         JSONObject json = JSONObject.fromObject(event);

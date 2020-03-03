@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.jenkins.kubesphere.plugins.event.Notification
+package io.jenkins.kubesphere.plugins.event.KubeSphereNotification
 
 import io.jenkins.kubesphere.plugins.event.NotificationEndpoint
 

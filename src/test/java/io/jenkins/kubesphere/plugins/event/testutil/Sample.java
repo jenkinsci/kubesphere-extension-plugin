@@ -1,6 +1,6 @@
 package io.jenkins.kubesphere.plugins.event.testutil;
 
-import io.jenkins.kubesphere.plugins.event.Notification;
+import io.jenkins.kubesphere.plugins.event.KubeSphereNotification;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -12,8 +12,8 @@ public final class Sample {
     private Sample() {
     }
 
-    public static Notification.Event event() {
-        return new Notification.Event("testEvent", "argFoo", "foo", "argBar", "bar");
+    public static KubeSphereNotification.Event event() {
+        return new KubeSphereNotification.Event("testEvent", "argFoo", "foo", "argBar", "bar");
     }
 
     public static Map<String, Object> extraArgs() {

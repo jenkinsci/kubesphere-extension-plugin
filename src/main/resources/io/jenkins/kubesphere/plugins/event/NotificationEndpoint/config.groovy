@@ -14,7 +14,7 @@
 
 package io.jenkins.kubesphere.plugins.event.NotificationEndpoint
 
-import io.jenkins.kubesphere.plugins.event.Notification
+import io.jenkins.kubesphere.plugins.event.KubeSphereNotification
 def f=namespace(lib.FormTagLib)
 def st=namespace("jelly:stapler")
 
@@ -24,7 +24,7 @@ f.advanced {
 	f.optionalBlock(name:"events", title:_("All Events"), negative:true, checked:events.isEmpty()) {
 		f.nested {
 			table(width:"100%") {
-				Notification.ENDPOINTS.each { endpoint ->
+				KubeSphereNotification.ENDPOINTS.each { endpoint ->
 					f.optionalBlock(name:"event", title:endpoint, checked:events[endpoint] != null) {
 						f.invisibleEntry {
 							input(type:"hidden", name:"endpoint", value:endpoint)

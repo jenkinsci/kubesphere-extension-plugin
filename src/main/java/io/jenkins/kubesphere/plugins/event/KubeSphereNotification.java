@@ -37,8 +37,7 @@ import static hudson.init.InitMilestone.PLUGINS_STARTED;
  * @author runzexia
  */
 @Extension
-@Symbol("kubesphere-event-notifacation")
-public class Notification implements Describable<Notification> {
+public class KubeSphereNotification implements Describable<KubeSphereNotification> {
 
     static final String JENKINS_JOB_STARTED = "jenkins.job.started";
     static final String JENKINS_JOB_COMPLETED = "jenkins.job.completed";
@@ -48,12 +47,12 @@ public class Notification implements Describable<Notification> {
             JENKINS_JOB_COMPLETED,
             JENKINS_JOB_FINALIZED,
     };
-    private static final Logger LOGGER = Logger.getLogger(Notification.class.getName());
-    private static Notification instance;
+    private static final Logger LOGGER = Logger.getLogger(KubeSphereNotification.class.getName());
+    private static KubeSphereNotification instance;
 
     @Initializer(after = PLUGINS_STARTED)
     public static void init() {
-        instance = Jenkins.get().getExtensionList(Notification.class).get(0);
+        instance = Jenkins.get().getExtensionList(KubeSphereNotification.class).get(0);
     }
 
     public static void notify(Event event) {
@@ -94,11 +93,11 @@ public class Notification implements Describable<Notification> {
     }
 
     @Extension
-    public static final class DescriptorImpl extends Descriptor<Notification> {
+    public static final class DescriptorImpl extends Descriptor<KubeSphereNotification> {
         private DescribableList<NotificationEndpoint, Descriptor<NotificationEndpoint>> endpoints = new DescribableList<NotificationEndpoint, Descriptor<NotificationEndpoint>>(this);
 
         public DescriptorImpl() {
-            super(Notification.class);
+            super(KubeSphereNotification.class);
             load();
         }
 

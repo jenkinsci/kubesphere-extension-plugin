@@ -34,7 +34,7 @@ public class NotificationRunListener extends RunListener<Run> {
         try {
             JobState state = new JobState(JobPhase.STARTED, r, listener, r.getTimeInMillis());
 
-            Notification.notify(new Notification.Event(Notification.JENKINS_JOB_STARTED,
+            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_STARTED,
                     "jobState", state));
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class NotificationRunListener extends RunListener<Run> {
     public void onCompleted(Run r, TaskListener listener) {
         try {
             JobState state = new JobState(JobPhase.COMPLETED, r, listener, r.getTimeInMillis() + +r.getDuration());
-            Notification.notify(new Notification.Event(Notification.JENKINS_JOB_COMPLETED,
+            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_COMPLETED,
                     "jobState", state));
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class NotificationRunListener extends RunListener<Run> {
     public void onFinalized(Run r) {
         try {
             JobState state = new JobState(JobPhase.FINALIZED, r, null, r.getTimeInMillis() + +r.getDuration());
-            Notification.notify(new Notification.Event(Notification.JENKINS_JOB_FINALIZED,
+            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_FINALIZED,
                     "jobState", state));
         } catch (IOException e) {
             e.printStackTrace();
