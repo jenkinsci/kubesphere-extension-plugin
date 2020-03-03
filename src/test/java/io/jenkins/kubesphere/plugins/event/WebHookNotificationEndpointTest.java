@@ -12,8 +12,6 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -57,7 +55,7 @@ public class WebHookNotificationEndpointTest {
         notificationEndpoint.notify(Sample.event());
         verify(1, postRequestedFor(urlEqualTo("/event")));
     }
-    
+
     private String baseUrl() {
         return "http://127.0.0.1:" + webHook.port();
     }
