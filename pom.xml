@@ -37,6 +37,54 @@
             <artifactId>workflow-scm-step</artifactId>
             <version>2.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <!-- using version 1.51, because later versions of wiremock build on HttpClientBuilder introduced by httpclient-4.3. -->
+            <version>1.51</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.jenkins</groupId>
+            <artifactId>configuration-as-code</artifactId>
+            <version>${configuration-as-code.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.jenkins.configuration-as-code</groupId>
+            <artifactId>test-harness</artifactId>
+            <version>${configuration-as-code.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jenkins-ci.main</groupId>
+                    <artifactId>jenkins-test-harness</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
     </dependencies>
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
@@ -51,6 +99,7 @@
     <properties>
         <jenkins.version>2.164.1</jenkins.version>
         <java.level>8</java.level>
+        <configuration-as-code.version>1.35</configuration-as-code.version>
     </properties>
     <name>KubeSphere Extension Plugin</name>
     <licenses>
