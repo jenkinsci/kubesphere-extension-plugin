@@ -1,0 +1,59 @@
+jenkins:
+  agentProtocols:
+    - "JNLP4-connect"
+    - "Ping"
+  disableRememberMe: false
+  markupFormatter: "plainText"
+  mode: NORMAL
+  myViewsTabBar: "standard"
+  numExecutors: 2
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: false
+  scmCheckoutRetryCount: 0
+  slaveAgentPort: 0
+  updateCenter:
+    sites:
+      - id: "default"
+        url: "https://updates.jenkins.io/update-center.json"
+  views:
+    - all:
+        name: "all"
+  viewsTabBar: "standard"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  downloadSettings:
+    useBrowser: false
+  remotingCLI:
+    enabled: true
+  sSHD:
+    port: -1
+unclassified:
+  gitHubPluginConfig:
+    hookUrl: "http://127.0.0.1:8080/jenkins/github-webhook/"
+  gitSCM:
+    createAccountBasedOnEmail: false
+    globalConfigName: "runzexia"
+  mailer:
+    adminAddress: "address not configured yet <nobody@nowhere>"
+    charset: "UTF-8"
+    useSsl: false
+  kubeSphereNotification:
+    endpoints:
+      - webHook:
+          timeout: 300
+          url: "http://127.0.0.1:30123"
+  pollSCM:
+    pollingThreadCount: 10
+tool:
+  git:
+    installations:
+      - home: "git"
+        name: "Default"
