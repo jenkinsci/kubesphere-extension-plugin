@@ -23,7 +23,6 @@ import hudson.util.DescribableList;
 import jenkins.model.Jenkins;
 import jenkins.util.Timer;
 import net.sf.json.JSONObject;
-import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -76,8 +75,8 @@ public class KubeSphereNotification implements Describable<KubeSphereNotificatio
                         endpoint.notify(event);
                     }
                 });
-            } else if (endpoint.getEvents().containsKey(event.getName())) {
-                final NotificationEndpoint.EndpointEvent endpointEvent = endpoint.getEvents().get(event.getName());
+            } else if (endpoint.getEvents().containsKey(event.getType())) {
+                final NotificationEndpoint.EndpointEvent endpointEvent = endpoint.getEvents().get(event.getType());
                 start(new Runnable() {
                     @Override
                     public void run() {
@@ -124,26 +123,28 @@ public class KubeSphereNotification implements Describable<KubeSphereNotificatio
 
     public static final class Event {
 
-        private final Long timestamp;
+        private Long timestamp;
 
-        private final String type;
+        private String type;
 
-        private final Map<String, Object> args = Maps.newHashMap();
+        private Map<String, Object> args;
 
         public Event(String type, Object... args) {
             this.timestamp = System.currentTimeMillis();
             this.type = type;
+            this.args = Maps.newHashMap();
             for (int i = 0; i < args.length; i += 2) {
                 this.args.put((String) args[i], args[i + 1]);
             }
         }
+        public Event(){}
 
         public Long getTimestamp() {
             return timestamp;
         }
 
         @Whitelisted
-        public String getName() {
+        public String getType() {
             return type;
         }
 
@@ -152,5 +153,16 @@ public class KubeSphereNotification implements Describable<KubeSphereNotificatio
             return args;
         }
 
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void setArgs(Map<String, Object> args) {
+            this.args = args;
+        }
+
+        public void setTimestamp(Long timestamp) {
+            this.timestamp = timestamp;
+        }
     }
 }

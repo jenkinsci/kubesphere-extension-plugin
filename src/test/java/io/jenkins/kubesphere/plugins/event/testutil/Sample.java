@@ -22,4 +22,17 @@ public final class Sample {
         extraArgs.put("howMuch", 42);
         return extraArgs;
     }
+
+    public static final  String HELLO_WORLD_JOB = "<flow-definition plugin=\"workflow-job@2.32\">\n" +
+            "<actions/>\n" +
+            "<description/>\n" +
+            "<keepDependencies>false</keepDependencies>\n" +
+            "<properties/>\n" +
+            "<definition class=\"org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition\" plugin=\"workflow-cps@2.66\">\n" +
+            "<script>node { echo 'Hello World' }</script>\n" +
+            "<sandbox>true</sandbox>\n" +
+            "</definition>\n" +
+            "<triggers/>\n" +
+            "<disabled>false</disabled>\n" +
+            "</flow-definition>";
 }
