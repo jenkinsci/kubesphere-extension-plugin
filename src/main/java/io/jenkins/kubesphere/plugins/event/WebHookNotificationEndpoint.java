@@ -14,9 +14,11 @@
 
 package io.jenkins.kubesphere.plugins.event;
 
+import com.google.common.collect.Maps;
 import hudson.Extension;
 import jenkins.util.Timer;
 import net.sf.json.JSONObject;
+import org.apache.commons.httpclient.URIException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -26,9 +28,12 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
 
 
 /**
@@ -81,29 +86,35 @@ public class WebHookNotificationEndpoint extends NotificationEndpoint {
     }
 
     private void requestURL(KubeSphereNotification.Event event, String url) {
-        final HttpClient client = HttpClientBuilder.create().build();
-        final HttpPost method = new HttpPost(url);
-        JSONObject json = JSONObject.fromObject(event);
         try {
-            StringEntity entity = new StringEntity(json.toString());
-            method.setEntity(entity);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        Timer.get().schedule(new Runnable() {
-            @Override
-            public void run() {
-                method.abort();
+            final String localUrl = encodeQuery(interpolate(url, event));
+            final HttpClient client = HttpClientBuilder.create().build();
+            final HttpPost method = new HttpPost(localUrl);
+            JSONObject json = JSONObject.fromObject(event);
+            try {
+                StringEntity entity = new StringEntity(json.toString());
+                method.setEntity(entity);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
-        }, this.timeout, TimeUnit.SECONDS);
-        try {
-            final HttpResponse response = client.execute(method);
-            LOGGER.log(Level.FINE, "{0} status {1}", new Object[]{url, response});
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "communication failure: {0}", e.getMessage());
-        } finally {
-            method.releaseConnection();
+            Timer.get().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    method.abort();
+                }
+            }, this.timeout, TimeUnit.SECONDS);
+            try {
+                final HttpResponse response = client.execute(method);
+                LOGGER.log(Level.FINE, "{0} status {1}", new Object[]{url, response});
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "communication failure: {0}", e.getMessage());
+            } finally {
+                method.releaseConnection();
+            }
+        } catch (URIException e) {
+            LOGGER.log(Level.SEVERE, "malformed URL: {}", url);
         }
+
     }
 
     private Object readResolve() {
