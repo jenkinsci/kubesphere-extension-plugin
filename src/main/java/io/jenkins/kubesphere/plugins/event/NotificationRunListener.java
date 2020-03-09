@@ -21,8 +21,6 @@ import hudson.model.listeners.RunListener;
 import io.jenkins.kubesphere.plugins.event.models.JobPhase;
 import io.jenkins.kubesphere.plugins.event.models.JobState;
 
-import java.io.IOException;
-
 /**
  * @author runzexia
  */
@@ -31,41 +29,25 @@ public class NotificationRunListener extends RunListener<Run> {
 
     @Override
     public void onStarted(Run r, TaskListener listener) {
-        try {
-            JobState state = new JobState(JobPhase.STARTED, r, listener, r.getTimeInMillis());
+        JobState state = new JobState(JobPhase.STARTED, r, listener, r.getTimeInMillis());
 
-            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_STARTED,
-                    "jobState", state));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_STARTED,
+                "jobState", state));
     }
 
     @Override
     public void onCompleted(Run r, TaskListener listener) {
-        try {
-            JobState state = new JobState(JobPhase.COMPLETED, r, listener, r.getTimeInMillis() + +r.getDuration());
-            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_COMPLETED,
-                    "jobState", state));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        JobState state = new JobState(JobPhase.COMPLETED, r, listener, r.getTimeInMillis() + +r.getDuration());
+        KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_COMPLETED,
+                "jobState", state));
+
     }
 
     @Override
     public void onFinalized(Run r) {
-        try {
-            JobState state = new JobState(JobPhase.FINALIZED, r, null, r.getTimeInMillis() + +r.getDuration());
-            KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_FINALIZED,
-                    "jobState", state));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        JobState state = new JobState(JobPhase.FINALIZED, r, TaskListener.NULL, r.getTimeInMillis() + +r.getDuration());
+        KubeSphereNotification.notify(new KubeSphereNotification.Event(KubeSphereNotification.JENKINS_JOB_FINALIZED,
+                "jobState", state));
     }
 }

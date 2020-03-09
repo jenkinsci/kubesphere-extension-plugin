@@ -41,8 +41,14 @@ public class ScmState {
 
     }
 
-    public ScmState(Run run, TaskListener listener) throws IOException, InterruptedException {
-        EnvVars environment = run.getEnvironment(listener);
+    public ScmState(Run run, TaskListener listener) {
+        EnvVars environment = null;
+        try {
+            environment = run.getEnvironment(listener);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
         if (environment.get("GIT_URL") != null) {
             setUrl(environment.get("GIT_URL"));
         }

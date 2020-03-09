@@ -19,7 +19,8 @@ import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 
-import java.io.IOException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JobState {
 
@@ -36,7 +37,7 @@ public class JobState {
     private JobState() {
     }
 
-    public JobState(JobPhase phase, Run run, TaskListener listener, long timestamp) throws IOException, InterruptedException {
+    public JobState(JobPhase phase, @Nonnull Run run, @Nonnull TaskListener listener, long timestamp) {
         Job job = run.getParent();
         BuildState buildState = new BuildState(phase, run, timestamp);
         ScmState scmState = new ScmState(run, listener);
@@ -50,8 +51,10 @@ public class JobState {
         buildState.setScm(scmState);
         buildState.setTestSummary(testState);
         Run preRun = findLastBuildThatFinished(run);
-        setPreviousCompletedBuild(new BuildState(JobPhase.COMPLETED, preRun,
-                preRun.getTimeInMillis() + preRun.getDuration()));
+        if (preRun != null) {
+            setPreviousCompletedBuild(new BuildState(JobPhase.COMPLETED, preRun,
+                    preRun.getTimeInMillis() + preRun.getDuration()));
+        }
 
     }
 
@@ -95,12 +98,16 @@ public class JobState {
         this.previousCompletedBuild = build;
     }
 
-
+    @Nullable
     private Run findLastBuildThatFinished(Run run){
         Run previousRun = run.getPreviousCompletedBuild();
         while(previousRun != null){
             Result previousResults = previousRun.getResult();
-            if (previousResults.equals(Result.SUCCESS) || previousResults.equals(Result.FAILURE) || previousResults.equals(Result.UNSTABLE)){
+
+            if (previousResults != null &&
+                    (previousResults.equals(Result.SUCCESS) ||
+                            previousResults.equals(Result.FAILURE) ||
+                            previousResults.equals(Result.UNSTABLE))){
                 return previousRun;
             }
             previousRun = previousRun.getPreviousCompletedBuild();

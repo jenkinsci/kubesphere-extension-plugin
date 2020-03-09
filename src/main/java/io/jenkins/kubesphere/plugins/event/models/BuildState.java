@@ -85,7 +85,9 @@ public class BuildState {
                     value.buildEnvironment(run, env);
                 }
             }
+
             setParameters(env);
+
         }
         updateArtifacts(run.getParent(), run);
     }
@@ -143,7 +145,7 @@ public class BuildState {
     }
 
     public void setParameters(Map<String, String> params) {
-        this.parameters = new HashMap<String, String>(params);
+        this.parameters = params;
     }
 
     public Map<String, Map<String, String>> getArtifacts() {
@@ -186,10 +188,6 @@ public class BuildState {
     private void updateArchivedArtifacts(Run run) {
         @SuppressWarnings("unchecked")
         List<Run.Artifact> buildArtifacts = run.getArtifacts();
-
-        if (buildArtifacts == null) {
-            return;
-        }
 
         for (Run.Artifact a : buildArtifacts) {
             String artifactUrl = Jenkins.getInstance().getRootUrl() + run.getUrl() + "artifact/" + a.getHref();
