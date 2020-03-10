@@ -35,7 +35,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 public class WebHookEventTest {
 
     @Rule
-    public JenkinsConfiguredWithCodeRule j = new JenkinsConfiguredWithCodeRule();
+    public  JenkinsConfiguredWithCodeRule j = new JenkinsConfiguredWithCodeRule();
 
     @Rule
     public WireMockRule webHook = new WireMockRule(
@@ -46,6 +46,21 @@ public class WebHookEventTest {
     public void prepareWireMock() throws Exception {
         webHook.stubFor(
                 post(urlMatching("/event"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.started"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.completed"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.finalized"))
                         .willReturn(aResponse()
                                 .withStatus(200))
         );
@@ -69,6 +84,7 @@ public class WebHookEventTest {
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
+        Thread.sleep(1000);
         verify(3, postRequestedFor(urlEqualTo("/event")));
         List<LoggedRequest> requests = WireMock.findAll(postRequestedFor(urlEqualTo("/event")));
 
@@ -101,6 +117,54 @@ public class WebHookEventTest {
         Assert.assertEquals(startEventCount,1);
         Assert.assertEquals(completedEventCount,1);
         Assert.assertEquals(finalizedEventCount,1);
+    }
+
+    @Test
+    @ConfiguredWithCode("casc_interpolate.yaml")
+    public void triggerJobWithInterpolateTest() throws IOException, InterruptedException, ExecutionException {
+        j.jenkins.createProjectFromXML("hello", new ByteArrayInputStream(
+                Sample.HELLO_WORLD_JOB.getBytes(StandardCharsets.UTF_8)));
+        WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
+        Run run = job.scheduleBuild2(0).waitForStart();
+        j.waitForCompletion(run);
+
+        verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+
+        List<LoggedRequest> requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        Assert.assertEquals(requests.size(),1);
+
+        KubeSphereNotification.Event startEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(startEvent.getType(),KubeSphereNotification.JENKINS_JOB_STARTED);
+        JobState startState = ObjectUtils.eventToJobState(startEvent);
+        Assert.assertEquals(startState.getName(), "hello");
+        Assert.assertEquals(startState.getBuild().getPhase(),JobPhase.STARTED);
+        Assert.assertEquals(startState.getBuild().getNumber(),1);
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        Assert.assertEquals(requests.size(),1);
+
+        KubeSphereNotification.Event completedEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(completedEvent.getType(),KubeSphereNotification.JENKINS_JOB_COMPLETED);
+        JobState completedState = ObjectUtils.eventToJobState(completedEvent);
+        Assert.assertEquals(completedState.getName(), "hello");
+        Assert.assertEquals(completedState.getBuild().getPhase(),JobPhase.COMPLETED);
+        Assert.assertEquals(completedState.getBuild().getNumber(),1);
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+        Assert.assertEquals(requests.size(),1);
+
+        KubeSphereNotification.Event finalizedEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(finalizedEvent.getType(),KubeSphereNotification.JENKINS_JOB_FINALIZED);
+        JobState finalizedState = ObjectUtils.eventToJobState(finalizedEvent);
+        Assert.assertEquals(finalizedState.getName(), "hello");
+        Assert.assertEquals(finalizedState.getBuild().getPhase(),JobPhase.FINALIZED);
+        Assert.assertEquals(finalizedState.getBuild().getNumber(),1);
+
     }
 
     private String baseUrl() {

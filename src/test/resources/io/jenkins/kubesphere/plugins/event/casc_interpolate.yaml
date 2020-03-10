@@ -1,0 +1,6 @@
+unclassified:
+  kubeSphereNotification:
+    endpoints:
+      - webHook:
+          timeout: 300
+          url: "http://127.0.0.1:30123/event/^${type}"
