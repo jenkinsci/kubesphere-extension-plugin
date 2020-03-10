@@ -57,6 +57,7 @@
     <orderEntry type="library" name="Maven: org.jenkins-ci.ui:jquery-detached:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.ui:ace-editor:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.cloudbees:diff4j:1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-api-impl:1.18.1" level="project" />
     <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-scm-api:1.18.1" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pubsub-light:1.12" level="project" />

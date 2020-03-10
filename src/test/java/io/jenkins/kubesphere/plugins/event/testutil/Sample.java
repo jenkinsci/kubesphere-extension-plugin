@@ -47,4 +47,17 @@ public final class Sample {
             "    writeFile file:'result.xml', text: test\n" +
             "    junit 'result.xml'\n" +
             "}\n";
+
+    public static final String ARTIFACTS_TEST_JENKINSFILE = "node {\n" +
+            "    def test = \"<testsuite tests=\\\"3\\\">\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo1\\\" name=\\\"ASuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo2\\\" name=\\\"AnotherSuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo3\\\" name=\\\"AFailingTest\\\">\\n\" +\n" +
+            "        \"        <failure type=\\\"NotEnoughFoo\\\"> details about failure </failure>\\n\" +\n" +
+            "        \"    </testcase>\\n\" +\n" +
+            "        \"</testsuite>\";\n" +
+            "    writeFile file:'result.xml', text: test\n" +
+            "    archiveArtifacts artifacts:'result.xml'\n" +
+            "    junit 'result.xml'\n" +
+            "}\n";
 }

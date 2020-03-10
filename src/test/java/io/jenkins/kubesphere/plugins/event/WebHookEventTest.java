@@ -248,7 +248,7 @@ public class WebHookEventTest {
         j.waitForCompletion(run);
         Run run2 = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run2);
-        // sleep to wait event 
+        // sleep to wait event
         Thread.sleep(1000);
 
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
@@ -309,6 +309,67 @@ public class WebHookEventTest {
 
     }
 
+
+    @Test
+    @ConfiguredWithCode("casc_interpolate.yaml")
+    public void JobWithArtifactsTest() throws IOException, InterruptedException, ExecutionException{
+        WorkflowJob p = j.createProject(WorkflowJob.class, "artifacts_test");
+        p.setDefinition(new CpsFlowDefinition(Sample.ARTIFACTS_TEST_JENKINSFILE, false));
+        p.save();
+        WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("artifacts_test", Job.class);
+        Run run = job.scheduleBuild2(0).waitForStart();
+        j.waitForCompletion(run);
+        Run run2 = job.scheduleBuild2(0).waitForStart();
+        j.waitForCompletion(run2);
+        // sleep to wait event
+        Thread.sleep(1000);
+
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+
+        List<LoggedRequest> requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event startEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(startEvent.getType(),KubeSphereNotification.JENKINS_JOB_STARTED);
+        JobState startState = ObjectUtils.eventToJobState(startEvent);
+        Assert.assertEquals(startState.getName(), "artifacts_test");
+        Assert.assertEquals(startState.getBuild().getPhase(),JobPhase.STARTED);
+        Assert.assertEquals(startState.getBuild().getNumber(),2);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getNumber(),1);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getArtifacts().size(),1);
+        Assert.assertNotNull(startState.getPreviousCompletedBuild().getArtifacts().get("result.xml"));
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event completedEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(completedEvent.getType(),KubeSphereNotification.JENKINS_JOB_COMPLETED);
+        JobState completedState = ObjectUtils.eventToJobState(completedEvent);
+        Assert.assertEquals(completedState.getName(), "artifacts_test");
+        Assert.assertEquals(completedState.getBuild().getPhase(),JobPhase.COMPLETED);
+        Assert.assertEquals(completedState.getBuild().getNumber(),2);
+        Assert.assertEquals(completedState.getBuild().getStatus(), Result.UNSTABLE.toString());
+        Assert.assertEquals(completedState.getBuild().getArtifacts().size(),1);
+        Assert.assertNotNull(completedState.getBuild().getArtifacts().get("result.xml"));
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event finalizedEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(finalizedEvent.getType(),KubeSphereNotification.JENKINS_JOB_FINALIZED);
+        JobState finalizedState = ObjectUtils.eventToJobState(finalizedEvent);
+        Assert.assertEquals(finalizedState.getName(), "artifacts_test");
+        Assert.assertEquals(finalizedState.getBuild().getPhase(),JobPhase.FINALIZED);
+        Assert.assertEquals(finalizedState.getBuild().getNumber(),2);
+        Assert.assertEquals(finalizedState.getBuild().getStatus(), Result.UNSTABLE.toString());
+        Assert.assertEquals(finalizedState.getBuild().getArtifacts().size(),1);
+        Assert.assertNotNull(finalizedState.getBuild().getArtifacts().get("result.xml"));
+    }
 
     private String baseUrl() {
         return "http://127.0.0.1:" + webHook.port();

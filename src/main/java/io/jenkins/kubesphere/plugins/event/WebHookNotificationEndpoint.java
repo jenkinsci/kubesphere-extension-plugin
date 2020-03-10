@@ -14,7 +14,9 @@
 
 package io.jenkins.kubesphere.plugins.event;
 
-import com.google.common.collect.Maps;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import hudson.Extension;
 import jenkins.util.Timer;
 import net.sf.json.JSONObject;
@@ -28,7 +30,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +48,8 @@ public class WebHookNotificationEndpoint extends NotificationEndpoint {
     private String url;
 
     private long timeout;
+
+    private static final Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.IDENTITY).create();
 
     public WebHookNotificationEndpoint() {
 
@@ -90,9 +93,8 @@ public class WebHookNotificationEndpoint extends NotificationEndpoint {
             final String localUrl = encodeQuery(interpolate(url, event));
             final HttpClient client = HttpClientBuilder.create().build();
             final HttpPost method = new HttpPost(localUrl);
-            JSONObject json = JSONObject.fromObject(event);
             try {
-                StringEntity entity = new StringEntity(json.toString());
+                StringEntity entity = new StringEntity(gson.toJson(event));
                 method.setEntity(entity);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
