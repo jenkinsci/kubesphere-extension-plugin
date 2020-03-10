@@ -86,6 +86,7 @@ public class WebHookEventTest {
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
+        // sleep to wait event
         Thread.sleep(1000);
         verify(3, postRequestedFor(urlEqualTo("/event")));
         List<LoggedRequest> requests = WireMock.findAll(postRequestedFor(urlEqualTo("/event")));
@@ -129,7 +130,8 @@ public class WebHookEventTest {
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
-
+        // sleep to wait event
+        Thread.sleep(1000);
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
@@ -181,7 +183,8 @@ public class WebHookEventTest {
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("unit_test", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
-
+        // sleep to wait event
+        Thread.sleep(1000);
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
@@ -245,6 +248,8 @@ public class WebHookEventTest {
         j.waitForCompletion(run);
         Run run2 = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run2);
+        // sleep to wait event 
+        Thread.sleep(1000);
 
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
@@ -303,6 +308,7 @@ public class WebHookEventTest {
         Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().get(0),"foo3.AFailingTest");
 
     }
+
 
     private String baseUrl() {
         return "http://127.0.0.1:" + webHook.port();
