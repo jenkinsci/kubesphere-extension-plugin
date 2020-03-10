@@ -52,8 +52,12 @@ public class JobState {
         buildState.setTestSummary(testState);
         Run preRun = findLastBuildThatFinished(run);
         if (preRun != null) {
+            TestState preRunTestState = new TestState(preRun);
+            ScmState preRunScmState = new ScmState(preRun, TaskListener.NULL);
             setPreviousCompletedBuild(new BuildState(JobPhase.COMPLETED, preRun,
                     preRun.getTimeInMillis() + preRun.getDuration()));
+            getPreviousCompletedBuild().setScm(preRunScmState);
+            getPreviousCompletedBuild().setTestSummary(preRunTestState);
         }
 
     }

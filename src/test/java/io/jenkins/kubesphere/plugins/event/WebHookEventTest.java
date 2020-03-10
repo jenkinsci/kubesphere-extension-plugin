@@ -4,8 +4,6 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
@@ -234,6 +232,78 @@ public class WebHookEventTest {
         Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().get(0),"foo3.AFailingTest");
 
     }
+
+    @Test
+    @ConfiguredWithCode("casc_interpolate.yaml")
+    public void JobWithRunTwiceTest() throws IOException, InterruptedException, ExecutionException{
+
+        WorkflowJob p = j.createProject(WorkflowJob.class, "unit_test");
+        p.setDefinition(new CpsFlowDefinition(Sample.UNIT_TEST_JENKINSFILE, false));
+        p.save();
+        WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("unit_test", Job.class);
+        Run run = job.scheduleBuild2(0).waitForStart();
+        j.waitForCompletion(run);
+        Run run2 = job.scheduleBuild2(0).waitForStart();
+        j.waitForCompletion(run2);
+
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+
+        List<LoggedRequest> requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event startEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(startEvent.getType(),KubeSphereNotification.JENKINS_JOB_STARTED);
+        JobState startState = ObjectUtils.eventToJobState(startEvent);
+        Assert.assertEquals(startState.getName(), "unit_test");
+        Assert.assertEquals(startState.getBuild().getPhase(),JobPhase.STARTED);
+        Assert.assertEquals(startState.getBuild().getNumber(),2);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getNumber(),1);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getStatus(), Result.UNSTABLE.toString());
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getPhase(), JobPhase.COMPLETED);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getTestSummary().getFailed(),1);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getTestSummary().getTotal(),3);
+        Assert.assertEquals(startState.getPreviousCompletedBuild().getTestSummary().getPassed(),2);
+
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event completedEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(completedEvent.getType(),KubeSphereNotification.JENKINS_JOB_COMPLETED);
+        JobState completedState = ObjectUtils.eventToJobState(completedEvent);
+        Assert.assertEquals(completedState.getName(), "unit_test");
+        Assert.assertEquals(completedState.getBuild().getPhase(),JobPhase.COMPLETED);
+        Assert.assertEquals(completedState.getBuild().getNumber(),2);
+        Assert.assertEquals(completedState.getBuild().getStatus(), Result.UNSTABLE.toString());
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailed(),1);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getPassed(),2);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getTotal(),3);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().size(),1);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().get(0),"foo3.AFailingTest");
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
+        Assert.assertEquals(requests.size(),2);
+
+        KubeSphereNotification.Event finalizedEvent = ObjectUtils.jsonToEvent(requests.get(1).getBodyAsString());
+        Assert.assertEquals(finalizedEvent.getType(),KubeSphereNotification.JENKINS_JOB_FINALIZED);
+        JobState finalizedState = ObjectUtils.eventToJobState(finalizedEvent);
+        Assert.assertEquals(finalizedState.getName(), "unit_test");
+        Assert.assertEquals(finalizedState.getBuild().getPhase(),JobPhase.FINALIZED);
+        Assert.assertEquals(finalizedState.getBuild().getNumber(),2);
+        Assert.assertEquals(finalizedState.getBuild().getStatus(), Result.UNSTABLE.toString());
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailed(),1);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getPassed(),2);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getTotal(),3);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().size(),1);
+        Assert.assertEquals(completedState.getBuild().getTestSummary().getFailedTests().get(0),"foo3.AFailingTest");
+
+    }
+
     private String baseUrl() {
         return "http://127.0.0.1:" + webHook.port();
     }
