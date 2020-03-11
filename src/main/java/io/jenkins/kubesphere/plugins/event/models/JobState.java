@@ -40,7 +40,6 @@ public class JobState {
     public JobState(JobPhase phase, @Nonnull Run run, @Nonnull TaskListener listener, long timestamp) {
         Job job = run.getParent();
         BuildState buildState = new BuildState(phase, run, timestamp);
-        ScmState scmState = new ScmState(run, listener);
         TestState testState = new TestState(run);
 
         setName(job.getName());
@@ -48,12 +47,13 @@ public class JobState {
         setUrl(job.getUrl());
         setBuild(buildState);
 
-        buildState.setScm(scmState);
         buildState.setTestSummary(testState);
         Run preRun = findLastBuildThatFinished(run);
         if (preRun != null) {
+            TestState preRunTestState = new TestState(preRun);
             setPreviousCompletedBuild(new BuildState(JobPhase.COMPLETED, preRun,
                     preRun.getTimeInMillis() + preRun.getDuration()));
+            getPreviousCompletedBuild().setTestSummary(preRunTestState);
         }
 
     }

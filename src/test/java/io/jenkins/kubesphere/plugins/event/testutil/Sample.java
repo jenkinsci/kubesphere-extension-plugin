@@ -23,7 +23,7 @@ public final class Sample {
         return extraArgs;
     }
 
-    public static final  String HELLO_WORLD_JOB = "<flow-definition plugin=\"workflow-job@2.32\">\n" +
+    public static final String HELLO_WORLD_JOB = "<flow-definition plugin=\"workflow-job@2.32\">\n" +
             "<actions/>\n" +
             "<description/>\n" +
             "<keepDependencies>false</keepDependencies>\n" +
@@ -35,4 +35,29 @@ public final class Sample {
             "<triggers/>\n" +
             "<disabled>false</disabled>\n" +
             "</flow-definition>";
+
+    public static final String UNIT_TEST_JENKINSFILE = "node {\n" +
+            "    def test = \"<testsuite tests=\\\"3\\\">\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo1\\\" name=\\\"ASuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo2\\\" name=\\\"AnotherSuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo3\\\" name=\\\"AFailingTest\\\">\\n\" +\n" +
+            "        \"        <failure type=\\\"NotEnoughFoo\\\"> details about failure </failure>\\n\" +\n" +
+            "        \"    </testcase>\\n\" +\n" +
+            "        \"</testsuite>\";\n" +
+            "    writeFile file:'result.xml', text: test\n" +
+            "    junit 'result.xml'\n" +
+            "}\n";
+
+    public static final String ARTIFACTS_TEST_JENKINSFILE = "node {\n" +
+            "    def test = \"<testsuite tests=\\\"3\\\">\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo1\\\" name=\\\"ASuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo2\\\" name=\\\"AnotherSuccessfulTest\\\"/>\\n\" +\n" +
+            "        \"    <testcase classname=\\\"foo3\\\" name=\\\"AFailingTest\\\">\\n\" +\n" +
+            "        \"        <failure type=\\\"NotEnoughFoo\\\"> details about failure </failure>\\n\" +\n" +
+            "        \"    </testcase>\\n\" +\n" +
+            "        \"</testsuite>\";\n" +
+            "    writeFile file:'result.xml', text: test\n" +
+            "    archiveArtifacts artifacts:'result.xml'\n" +
+            "    junit 'result.xml'\n" +
+            "}\n";
 }

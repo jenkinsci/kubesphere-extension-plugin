@@ -19,54 +19,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-rest-impl:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-rest:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-commons:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:jackson2-api:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.8" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean.rest.annotation:capability-annotation:1.2" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-web:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:variant:1.1" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:jenkins-design-language:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-core-js:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:mailer:1.20" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:display-url-api:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-jwt:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: org.bitbucket.b_c:jose4j:0.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:credentials:2.1.16" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.abego.treelayout:org.abego.treelayout.core:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: oro:oro:2.0.8" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet.hudson.plugins:favorite:2.3.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:matrix-project:1.7.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:token-macro:2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.parboiled:parboiled-java:1.1.7" level="project" />
-    <orderEntry type="library" name="Maven: org.parboiled:parboiled-core:1.1.7" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:junit:1.23" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:cloudbees-folder:6.3" level="project" />
-    <orderEntry type="library" name="Maven: io.keen:keen-client-api-java:5.2.0" level="project" />
-    <orderEntry type="library" name="Maven: io.keen:keen-client-java-core:5.2.0" level="project" />
-    <orderEntry type="library" name="Maven: ua_parser:ua-parser:1.3.0" level="project" />
-    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.10" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.9" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-cps:2.66" level="project" />
-    <orderEntry type="library" name="Maven: com.cloudbees:groovy-cps:1.26" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.ui:jquery-detached:1.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.ui:ace-editor:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.cloudbees:diff4j:1.2" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-api-impl:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-scm-api:1.18.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pubsub-light:1.12" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:branch-api:2.0.20" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-job:2.32" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-support:3.2" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling-river:2.0.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling:2.0.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-multibranch:2.20" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:scm-api:2.2.8" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:git:3.8.0" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.5" level="project" />
+    <orderEntry type="library" name="Maven: com.infradna.tool:bridge-method-annotation:1.17" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:git-client:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jgit:org.eclipse.jgit:4.5.4.201711221230-r" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.javaewah:JavaEWAH:0.7.9" level="project" />
@@ -80,8 +36,54 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:fluent-hc:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient-cache:4.5.3" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:credentials:2.1.14" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.5" level="project" />
+    <orderEntry type="library" name="Maven: org.abego.treelayout:org.abego.treelayout.core:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:ssh-credentials:1.13" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:scm-api:2.2.8" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:matrix-project:1.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:mailer:1.18" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-rest-impl:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-rest:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-commons:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:jackson2-api:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.8" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean.rest.annotation:capability-annotation:1.2" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-web:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:variant:1.1" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:jenkins-design-language:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-core-js:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:display-url-api:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-jwt:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: org.bitbucket.b_c:jose4j:0.6.0" level="project" />
+    <orderEntry type="library" name="Maven: oro:oro:2.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.jvnet.hudson.plugins:favorite:2.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:token-macro:2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.parboiled:parboiled-java:1.1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.parboiled:parboiled-core:1.1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:junit:1.23" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:cloudbees-folder:6.3" level="project" />
+    <orderEntry type="library" name="Maven: io.keen:keen-client-api-java:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: io.keen:keen-client-java-core:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: ua_parser:ua-parser:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.10" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-cps:2.66" level="project" />
+    <orderEntry type="library" name="Maven: com.cloudbees:groovy-cps:1.26" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.ui:jquery-detached:1.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.ui:ace-editor:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.cloudbees:diff4j:1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-api-impl:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: io.jenkins.blueocean:blueocean-pipeline-scm-api:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pubsub-light:1.12" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:branch-api:2.0.20" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-job:2.32" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-support:3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling-river:2.0.6.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling:2.0.6.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-multibranch:2.20" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-durable-task-step:2.26" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:durable-task:1.26" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pipeline-graph-analysis:1.10" level="project" />
@@ -199,6 +201,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.vladsch.flexmark:flexmark-util:0.50.42" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.vladsch.flexmark:flexmark-youtrack-converter:0.50.42" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.stefanbirkner:system-rules:1.19.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jenkins-ci.plugins:git:tests:3.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jenkins-ci:annotation-indexer:1.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jenkins-ci.plugins:scm-api:tests:2.2.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.spotbugs:spotbugs-annotations:3.1.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
@@ -247,12 +252,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.kohsuke.stapler:stapler-adjunct-timeline:1.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.kohsuke.stapler:stapler-adjunct-codemirror:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.jenkins.stapler:jenkins-stapler-support:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.infradna.tool:bridge-method-annotation:1.13" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.kohsuke.stapler:json-lib:2.4-jenkins-2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.ezmorph:ezmorph:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-httpclient:commons-httpclient:3.1-jenkins-1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: args4j:args4j:2.0.31" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci:annotation-indexer:1.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jenkins-ci:bytecode-compatibility-transformer:2.0-beta-2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.kohsuke:asm6:6.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jenkins-ci:task-reactor:1.5" level="project" />

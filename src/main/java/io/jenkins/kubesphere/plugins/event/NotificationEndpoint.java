@@ -15,6 +15,7 @@
 package io.jenkins.kubesphere.plugins.event;
 
 import com.google.common.collect.Maps;
+import groovy.lang.Binding;
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractDescribableImpl;
@@ -23,9 +24,15 @@ import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
+import org.jenkinsci.plugins.scriptsecurity.scripts.ApprovalContext;
+import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class NotificationEndpoint extends AbstractDescribableImpl<NotificationEndpoint> implements ExtensionPoint {
@@ -35,6 +42,24 @@ public abstract class NotificationEndpoint extends AbstractDescribableImpl<Notif
 
     public static DescriptorExtensionList<NotificationEndpoint, Descriptor<NotificationEndpoint>> all() {
         return Jenkins.get().getDescriptorList(NotificationEndpoint.class);
+    }
+
+    protected String interpolate(String value, KubeSphereNotification.Event event) {
+        return interpolate(value, event, new HashMap<String, Object>());
+    }
+
+    protected String interpolate(String value, KubeSphereNotification.Event event, Map<String, Object> extraArgs) {
+        final Map<String, Object> args = Maps.newHashMap(event.getArgs());
+        args.putAll(extraArgs);
+        args.put("type", event.getType());
+        SecureGroovyScript script = new SecureGroovyScript('"' + value + '"', true, new ArrayList<ClasspathEntry>());
+        try {
+            script.configuring(ApprovalContext.create());
+            return script.evaluate(KubeSphereNotification.class.getClassLoader(), new Binding(args)).toString();
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Invalid message", e);
+            return value;
+        }
     }
 
     public abstract void notify(KubeSphereNotification.Event event);

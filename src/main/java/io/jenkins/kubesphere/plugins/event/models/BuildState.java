@@ -19,11 +19,13 @@ import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;
 import hudson.model.Result;
 import hudson.model.Run;
+import io.jenkins.kubesphere.plugins.event.KubeSphereNotification;
 import jenkins.model.Jenkins;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static io.jenkins.kubesphere.plugins.event.Utils.verifyNotEmpty;
 
@@ -41,7 +43,8 @@ public class BuildState {
      *   notification.jar:
      *     archive: http://localhost:8080/job/notification-plugin/78/artifact/target/notification.jar
      */
-    private final Map<String, Map<String, String>> artifacts = new HashMap<String, Map<String, String>>();
+
+    private Map<String, Artifact> artifacts;
     private String fullUrl;
     private int number;
     private long queueId;
@@ -50,7 +53,6 @@ public class BuildState {
     private String status;
     private String url;
     private String displayName;
-    private ScmState scm;
     private Map<String, String> parameters;
     private TestState testSummary;
 
@@ -89,7 +91,16 @@ public class BuildState {
             setParameters(env);
 
         }
+        setArtifacts(new HashMap<>());
         updateArtifacts(run.getParent(), run);
+    }
+
+    public Map<String, Artifact> getArtifacts() {
+        return artifacts;
+    }
+
+    public void setArtifacts(Map<String, Artifact> artifacts) {
+        this.artifacts = artifacts;
     }
 
     public int getNumber() {
@@ -148,9 +159,6 @@ public class BuildState {
         this.parameters = params;
     }
 
-    public Map<String, Map<String, String>> getArtifacts() {
-        return artifacts;
-    }
 
     public String getDisplayName() {
         return displayName;
@@ -160,13 +168,6 @@ public class BuildState {
         this.displayName = displayName;
     }
 
-    public ScmState getScm() {
-        return scm;
-    }
-
-    public void setScm(ScmState scmState) {
-        this.scm = scmState;
-    }
 
     public TestState getTestSummary() {
         return testSummary;
@@ -175,6 +176,9 @@ public class BuildState {
     public void setTestSummary(TestState testSummary) {
         this.testSummary = testSummary;
     }
+
+
+
 
     /**
      * Updates artifacts Map with S3 links, if corresponding publisher is available.
@@ -188,10 +192,9 @@ public class BuildState {
     private void updateArchivedArtifacts(Run run) {
         @SuppressWarnings("unchecked")
         List<Run.Artifact> buildArtifacts = run.getArtifacts();
-
         for (Run.Artifact a : buildArtifacts) {
             String artifactUrl = Jenkins.getInstance().getRootUrl() + run.getUrl() + "artifact/" + a.getHref();
-            updateArtifact(a.relativePath, "archive", artifactUrl);
+            updateArtifact(a.relativePath, artifactUrl);
         }
     }
 
@@ -199,23 +202,14 @@ public class BuildState {
      * Updates an artifact URL.
      *
      * @param fileName     artifact file name
-     * @param locationName artifact location name, like "s3" or "archive"
      * @param locationUrl  artifact URL at the location specified
      */
-    private void updateArtifact(String fileName, String locationName, String locationUrl) {
-        verifyNotEmpty(fileName, locationName, locationUrl);
-
+    private void updateArtifact(String fileName, String locationUrl) {
+        verifyNotEmpty(fileName, locationUrl);
         if (!artifacts.containsKey(fileName)) {
-            artifacts.put(fileName, new HashMap<String, String>());
+            artifacts.put(fileName, new Artifact());
         }
-
-        if (artifacts.get(fileName).containsKey(locationName)) {
-            throw new RuntimeException(String.format(
-                    "Adding artifacts mapping '%s/%s/%s' - artifacts Map already contains mapping of location '%s': %s",
-                    fileName, locationName, locationUrl, locationName, artifacts));
-        }
-
-        artifacts.get(fileName).put(locationName, locationUrl);
+        artifacts.get(fileName).setArchive(locationUrl);
     }
 
     public JobPhase getPhase() {
