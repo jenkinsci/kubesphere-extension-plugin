@@ -55,6 +55,7 @@ public class BuildState {
     private String displayName;
     private Map<String, String> parameters;
     private TestState testSummary;
+    private InputState inputState;
 
     private BuildState() {
     }
@@ -218,5 +219,13 @@ public class BuildState {
 
     public void setPhase(JobPhase phase) {
         this.phase = phase;
+    }
+
+    public InputState getInputState() {
+        return inputState;
+    }
+
+    public void setInputState(InputState inputState) {
+        this.inputState = inputState;
     }
 }

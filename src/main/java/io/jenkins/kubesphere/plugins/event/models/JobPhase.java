@@ -19,5 +19,10 @@ package io.jenkins.kubesphere.plugins.event.models;
  */
 
 public enum JobPhase {
-    STARTED, COMPLETED, FINALIZED;
+    STARTED,
+    COMPLETED,
+    FINALIZED,
+    PAUSED,
+    RUNNING,
+    CANCELED,;
 }
