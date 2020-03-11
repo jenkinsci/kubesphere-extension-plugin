@@ -1,5 +1,6 @@
 package io.jenkins.kubesphere.plugins.event;
 
+import hudson.Extension;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import io.jenkins.kubesphere.plugins.event.models.JobPhase;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 /**
  * @author runzexia
  */
+@Extension
 public class NotificationInputListener implements InputExtension {
 
     private static final Logger LOGGER = Logger.getLogger(KubeSphereNotification.class.getName());

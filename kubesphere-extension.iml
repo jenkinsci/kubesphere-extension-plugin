@@ -19,13 +19,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jenkins-ci.plugins:credentials:2.1.13" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.antlr:antlr4-runtime:4.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.abego.treelayout:org.abego.treelayout.core:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pipeline-input-step:2.12-rc390.24ce2a334298" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-support:3.3" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling-river:2.0.6.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling:2.0.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:credentials:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.abego.treelayout:org.abego.treelayout.core:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:scm-api:2.2.8" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:git:3.8.0" level="project" />
     <orderEntry type="library" name="Maven: com.infradna.tool:bridge-method-annotation:1.17" level="project" />
@@ -119,12 +119,12 @@
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:plain-credentials:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pipeline-build-step:2.7" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:pipeline-stage-step:2.3" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:structs:1.17" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci:symbol-annotation:1.17" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:structs:1.19" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci:symbol-annotation:1.19" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:script-security:1.56" level="project" />
     <orderEntry type="library" name="Maven: org.kohsuke:groovy-sandbox:1.21" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-step-api:2.19" level="project" />
-    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-api:2.34" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-step-api:2.20" level="project" />
+    <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-api:2.35" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins.workflow:workflow-scm-step:2.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.tomakehurst:wiremock:1.51" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: xmlunit:xmlunit:1.5" level="project" />
