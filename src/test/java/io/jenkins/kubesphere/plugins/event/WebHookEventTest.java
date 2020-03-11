@@ -94,14 +94,14 @@ public class WebHookEventTest {
 
     @Test
     @ConfiguredWithCode("casc.yaml")
-    public void triggerJobTest() throws IOException, InterruptedException, ExecutionException {
+    public void triggerJobTest() throws Exception {
         j.jenkins.createProjectFromXML("hello", new ByteArrayInputStream(
                 Sample.HELLO_WORLD_JOB.getBytes(StandardCharsets.UTF_8)));
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
         // sleep to wait event
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
         verify(3, postRequestedFor(urlEqualTo("/event")));
         List<LoggedRequest> requests = WireMock.findAll(postRequestedFor(urlEqualTo("/event")));
 
@@ -138,14 +138,14 @@ public class WebHookEventTest {
 
     @Test
     @ConfiguredWithCode("casc_interpolate.yaml")
-    public void triggerJobWithInterpolateTest() throws IOException, InterruptedException, ExecutionException {
+    public void triggerJobWithInterpolateTest() throws Exception {
         j.jenkins.createProjectFromXML("hello", new ByteArrayInputStream(
                 Sample.HELLO_WORLD_JOB.getBytes(StandardCharsets.UTF_8)));
         WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("hello", Job.class);
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
         // sleep to wait event
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
@@ -189,7 +189,7 @@ public class WebHookEventTest {
 
     @Test
     @ConfiguredWithCode("casc_interpolate.yaml")
-    public void JobWithUTTest() throws IOException, InterruptedException, ExecutionException {
+    public void JobWithUTTest() throws Exception {
 
         WorkflowJob p = j.createProject(WorkflowJob.class, "unit_test");
         p.setDefinition(new CpsFlowDefinition(Sample.UNIT_TEST_JENKINSFILE, false));
@@ -198,7 +198,7 @@ public class WebHookEventTest {
         Run run = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run);
         // sleep to wait event
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
@@ -252,7 +252,7 @@ public class WebHookEventTest {
 
     @Test
     @ConfiguredWithCode("casc_interpolate.yaml")
-    public void JobWithRunTwiceTest() throws IOException, InterruptedException, ExecutionException {
+    public void JobWithRunTwiceTest() throws Exception {
 
         WorkflowJob p = j.createProject(WorkflowJob.class, "unit_test");
         p.setDefinition(new CpsFlowDefinition(Sample.UNIT_TEST_JENKINSFILE, false));
@@ -263,7 +263,7 @@ public class WebHookEventTest {
         Run run2 = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run2);
         // sleep to wait event
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
 
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
@@ -326,7 +326,7 @@ public class WebHookEventTest {
 
     @Test
     @ConfiguredWithCode("casc_interpolate.yaml")
-    public void JobWithArtifactsTest() throws IOException, InterruptedException, ExecutionException {
+    public void JobWithArtifactsTest() throws Exception {
         WorkflowJob p = j.createProject(WorkflowJob.class, "artifacts_test");
         p.setDefinition(new CpsFlowDefinition(Sample.ARTIFACTS_TEST_JENKINSFILE, false));
         p.save();
@@ -336,7 +336,7 @@ public class WebHookEventTest {
         Run run2 = job.scheduleBuild2(0).waitForStart();
         j.waitForCompletion(run2);
         // sleep to wait event
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
 
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
@@ -406,7 +406,7 @@ public class WebHookEventTest {
 
         project.scheduleBuild2(0).getFuture().get();
 
-        Thread.sleep(5000);
+        j.waitUntilNoActivity();
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
         verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.finalized")));
@@ -471,13 +471,13 @@ public class WebHookEventTest {
         project.setSourcesList(new ArrayList<>(Arrays.asList(branchSource)));
 
         project.scheduleBuild2(0).getFuture().get();
-        Thread.sleep(1000);
+        j.waitUntilNoActivity();
         sampleRepo1.write("Jenkinsfile", Sample.UNIT_TEST_JENKINSFILE);
         sampleRepo1.git("add", "Jenkinsfile");
         sampleRepo1.git("commit", "--all", "--message=build2");
         project.scheduleBuild2(0).getFuture().get();
 
-        Thread.sleep(2000);
+        j.waitUntilNoActivity();
 
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
         verify(2, postRequestedFor(urlEqualTo("/event/jenkins.job.completed")));
