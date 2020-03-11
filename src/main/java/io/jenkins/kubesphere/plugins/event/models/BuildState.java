@@ -53,7 +53,6 @@ public class BuildState {
     private String status;
     private String url;
     private String displayName;
-    private ScmState scm;
     private Map<String, String> parameters;
     private TestState testSummary;
 
@@ -169,13 +168,6 @@ public class BuildState {
         this.displayName = displayName;
     }
 
-    public ScmState getScm() {
-        return scm;
-    }
-
-    public void setScm(ScmState scmState) {
-        this.scm = scmState;
-    }
 
     public TestState getTestSummary() {
         return testSummary;
