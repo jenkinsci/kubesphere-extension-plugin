@@ -24,18 +24,18 @@ import jenkins.plugins.git.traits.BranchDiscoveryTrait;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject;
+import org.jenkinsci.plugins.workflow.support.steps.input.InputAction;
+import org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -77,6 +77,21 @@ public class WebHookEventTest {
         );
         webHook.stubFor(
                 post(urlMatching("/event/jenkins.job.finalized"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.input.started"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.input.proceeded"))
+                        .willReturn(aResponse()
+                                .withStatus(200))
+        );
+        webHook.stubFor(
+                post(urlMatching("/event/jenkins.job.input.aborted"))
                         .willReturn(aResponse()
                                 .withStatus(200))
         );
@@ -523,6 +538,102 @@ public class WebHookEventTest {
         Assert.assertEquals(finalizedState.getUrl(),"job/Repo/job/master/");
     }
 
+    @Test
+    @ConfiguredWithCode("casc_interpolate.yaml")
+    public void PipelineInputTest() throws Exception{
+        WorkflowJob p = j.createProject(WorkflowJob.class, "input");
+        p.setDefinition(new CpsFlowDefinition(Sample.INPUT_JENKINSFILE, false));
+        p.save();
+        WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("input", Job.class);
+        Run run = job.scheduleBuild2(0).waitForStart();
+        j.waitForMessage("Should we continue?",run);
+        Thread.sleep(1000);
+        verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        verify(1,postRequestedFor(urlEqualTo("/event/jenkins.job.input.started")));
+
+        List<LoggedRequest> requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.started")));
+        Assert.assertEquals(requests.size(), 1);
+
+        KubeSphereNotification.Event startEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(startEvent.getType(), KubeSphereNotification.JENKINS_JOB_INPUT_STARTED);
+        JobState startState = ObjectUtils.eventToJobState(startEvent);
+        Assert.assertEquals(startState.getName(), "input");
+        Assert.assertEquals(startState.getBuild().getPhase(), JobPhase.PAUSED);
+        Assert.assertEquals(startState.getBuild().getNumber(), 1);
+
+
+        InputAction inputAction = run.getAction(InputAction.class);
+        InputStepExecution execution = inputAction.getExecution(
+                startState.getBuild().getInputState().getId());
+        execution.proceed(null);
+        j.waitUntilNoActivity();
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.proceeded")));
+        Assert.assertEquals(requests.size(), 1);
+
+        KubeSphereNotification.Event continueEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(continueEvent.getType(), KubeSphereNotification.JENKINS_JOB_INPUT_PROCEEDED);
+        JobState continueState = ObjectUtils.eventToJobState(continueEvent);
+        Assert.assertEquals(continueState.getName(), "input");
+        Assert.assertEquals(continueState.getBuild().getPhase(), JobPhase.RUNNING);
+        Assert.assertEquals(continueState.getBuild().getNumber(), 1);
+
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.aborted")));
+        Assert.assertEquals(requests.size(), 0);
+    }
+
+
+    @Test
+    @ConfiguredWithCode("casc_interpolate.yaml")
+    public void PipelineAbortInputTest() throws Exception{
+        WorkflowJob p = j.createProject(WorkflowJob.class, "input");
+        p.setDefinition(new CpsFlowDefinition(Sample.INPUT_JENKINSFILE, false));
+        p.save();
+        WorkflowJob job = (WorkflowJob) j.jenkins.getItemByFullName("input", Job.class);
+        Run run = job.scheduleBuild2(0).waitForStart();
+        j.waitForMessage("Should we continue?",run);
+        Thread.sleep(1000);
+        verify(1, postRequestedFor(urlEqualTo("/event/jenkins.job.started")));
+        verify(1,postRequestedFor(urlEqualTo("/event/jenkins.job.input.started")));
+
+        List<LoggedRequest> requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.started")));
+        Assert.assertEquals(requests.size(), 1);
+
+        KubeSphereNotification.Event startEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(startEvent.getType(), KubeSphereNotification.JENKINS_JOB_INPUT_STARTED);
+        JobState startState = ObjectUtils.eventToJobState(startEvent);
+        Assert.assertEquals(startState.getName(), "input");
+        Assert.assertEquals(startState.getBuild().getPhase(), JobPhase.PAUSED);
+        Assert.assertEquals(startState.getBuild().getNumber(), 1);
+
+
+        InputAction inputAction = run.getAction(InputAction.class);
+        InputStepExecution execution = inputAction.getExecution(
+                startState.getBuild().getInputState().getId());
+        execution.doAbort();
+        j.waitUntilNoActivity();
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.aborted")));
+        Assert.assertEquals(requests.size(), 1);
+
+        KubeSphereNotification.Event abortEvent = ObjectUtils.jsonToEvent(requests.get(0).getBodyAsString());
+        Assert.assertEquals(abortEvent.getType(), KubeSphereNotification.JENKINS_JOB_INPUT_ABORTED);
+        JobState abortState = ObjectUtils.eventToJobState(abortEvent);
+        Assert.assertEquals(abortState.getName(), "input");
+        Assert.assertEquals(abortState.getBuild().getPhase(), JobPhase.CANCELED);
+        Assert.assertEquals(abortState.getBuild().getNumber(), 1);
+
+
+        requests = WireMock.findAll(
+                postRequestedFor(urlEqualTo("/event/jenkins.job.input.proceeded")));
+        Assert.assertEquals(requests.size(), 0);
+    }
     private String baseUrl() {
         return "http://127.0.0.1:" + webHook.port();
     }

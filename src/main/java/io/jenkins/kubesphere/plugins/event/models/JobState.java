@@ -18,6 +18,7 @@ import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import org.jenkinsci.plugins.workflow.support.steps.input.InputStep;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +38,7 @@ public class JobState {
     private JobState() {
     }
 
-    public JobState(JobPhase phase, @Nonnull Run run, @Nonnull TaskListener listener, long timestamp) {
+    public JobState(JobPhase phase, @Nonnull Run run, @Nonnull TaskListener listener, InputStep inputStep, String approver, long timestamp) {
         Job job = run.getParent();
         BuildState buildState = new BuildState(phase, run, timestamp);
         TestState testState = new TestState(run);
@@ -48,6 +49,10 @@ public class JobState {
         setBuild(buildState);
 
         buildState.setTestSummary(testState);
+        if (inputStep != null) {
+            InputState inputState = new InputState(inputStep, approver);
+            buildState.setInputState(inputState);
+        }
         Run preRun = findLastBuildThatFinished(run);
         if (preRun != null) {
             TestState preRunTestState = new TestState(preRun);
@@ -56,6 +61,11 @@ public class JobState {
             getPreviousCompletedBuild().setTestSummary(preRunTestState);
         }
 
+
+    }
+
+    public JobState(JobPhase phase, Run run, TaskListener listener, long timestamp) {
+        this(phase, run, listener, null, null, timestamp);
     }
 
     public String getName() {
@@ -94,20 +104,20 @@ public class JobState {
         return previousCompletedBuild;
     }
 
-    public void setPreviousCompletedBuild(BuildState build){
+    public void setPreviousCompletedBuild(BuildState build) {
         this.previousCompletedBuild = build;
     }
 
     @Nullable
-    private Run findLastBuildThatFinished(Run run){
+    private Run findLastBuildThatFinished(Run run) {
         Run previousRun = run.getPreviousCompletedBuild();
-        while(previousRun != null){
+        while (previousRun != null) {
             Result previousResults = previousRun.getResult();
 
             if (previousResults != null &&
                     (previousResults.equals(Result.SUCCESS) ||
                             previousResults.equals(Result.FAILURE) ||
-                            previousResults.equals(Result.UNSTABLE))){
+                            previousResults.equals(Result.UNSTABLE))) {
                 return previousRun;
             }
             previousRun = previousRun.getPreviousCompletedBuild();

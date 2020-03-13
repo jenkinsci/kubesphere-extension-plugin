@@ -41,10 +41,17 @@ public class KubeSphereNotification implements Describable<KubeSphereNotificatio
     static final String JENKINS_JOB_STARTED = "jenkins.job.started";
     static final String JENKINS_JOB_COMPLETED = "jenkins.job.completed";
     static final String JENKINS_JOB_FINALIZED = "jenkins.job.finalized";
+    static final String JENKINS_JOB_INPUT_STARTED = "jenkins.job.input.started";
+    static final String JENKINS_JOB_INPUT_PROCEEDED = "jenkins.job.input.proceeded";
+    static final String JENKINS_JOB_INPUT_ABORTED = "jenkins.job.input.aborted";
+
     static final String[] ENDPOINTS = new String[]{
             JENKINS_JOB_STARTED,
             JENKINS_JOB_COMPLETED,
             JENKINS_JOB_FINALIZED,
+            JENKINS_JOB_INPUT_STARTED,
+            JENKINS_JOB_INPUT_PROCEEDED,
+            JENKINS_JOB_INPUT_ABORTED
     };
     private static final Logger LOGGER = Logger.getLogger(KubeSphereNotification.class.getName());
     private static KubeSphereNotification instance;

@@ -60,4 +60,7 @@ public final class Sample {
             "    archiveArtifacts artifacts:'result.xml'\n" +
             "    junit 'result.xml'\n" +
             "}\n";
+    public static final String INPUT_JENKINSFILE = "node{\n" +
+            "    input (message:\"Should we continue?\",ok:\"Yes, we should.\",submitter:\"alice,bob\")\n" +
+            "}";
 }
