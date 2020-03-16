@@ -1,0 +1,388 @@
+
+## WebHookNotificationEndpoint Event Json
+
+### jenkins.job.started
+
+```json
+{
+    "timestamp":1583995334434,
+    "type":"jenkins.job.started",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"STARTED",
+                "timestamp":1583995334364,
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":0,
+                    "failed":0,
+                    "passed":0,
+                    "skipped":0
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/",
+                "number":1,
+                "queueId":3,
+                "phase":"COMPLETED",
+                "timestamp":1583825730989,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/1/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+### jenkins.job.completed
+
+```json
+{
+    "timestamp":1583995539696,
+    "type":"jenkins.job.completed",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"COMPLETED",
+                "timestamp":1583995539686,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/",
+                "number":1,
+                "queueId":3,
+                "phase":"COMPLETED",
+                "timestamp":1583825730989,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/1/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+### jenkins.job.finalized
+
+```json
+{
+    "timestamp":1583995539712,
+    "type":"jenkins.job.finalized",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"FINALIZED",
+                "timestamp":1583995539686,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/",
+                "number":1,
+                "queueId":3,
+                "phase":"COMPLETED",
+                "timestamp":1583825730989,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/1/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+### jenkins.job.input.started (pipeline input plugin)
+
+```json
+{
+    "timestamp":1583995335307,
+    "type":"jenkins.job.input.started",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"PAUSED",
+                "timestamp":1583995334364,
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":0,
+                    "failed":0,
+                    "passed":0,
+                    "skipped":0
+                },
+                "inputState":{
+                    "message":"Should we continue?",
+                    "id":"F94e366dea9a74a3816215b93be86d51",
+                    "submitter":[
+                        "alice",
+                        "bob"
+                    ],
+                    "approver":"SYSTEM"
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/",
+                "number":1,
+                "queueId":3,
+                "phase":"COMPLETED",
+                "timestamp":1583825730989,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/1/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+### jenkins.job.input.proceeded (pipeline input plugin)
+
+```json
+{
+    "timestamp":1583995539560,
+    "type":"jenkins.job.input.proceeded",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"RUNNING",
+                "timestamp":1583995334364,
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":0,
+                    "failed":0,
+                    "passed":0,
+                    "skipped":0
+                },
+                "inputState":{
+                    "message":"Should we continue?",
+                    "id":"F94e366dea9a74a3816215b93be86d51",
+                    "submitter":[
+                        "alice",
+                        "bob"
+                    ],
+                    "approver":"anonymous"
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/1/",
+                "number":1,
+                "queueId":3,
+                "phase":"COMPLETED",
+                "timestamp":1583825730989,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/1/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+### jenkins.job.input.aborted (pipeline input plugin)
+
+```json
+{
+    "timestamp":1583995856498,
+    "type":"jenkins.job.input.aborted",
+    "args":{
+        "jobState":{
+            "name":"artifacts_test",
+            "displayName":"artifacts_test",
+            "url":"job/folder/job/artifacts_test/",
+            "build":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/3/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/3/",
+                "number":3,
+                "queueId":3,
+                "phase":"CANCELED",
+                "timestamp":1583995836074,
+                "url":"job/folder/job/artifacts_test/3/",
+                "testSummary":{
+                    "total":0,
+                    "failed":0,
+                    "passed":0,
+                    "skipped":0
+                },
+                "inputState":{
+                    "message":"Should we continue?",
+                    "id":"F94e366dea9a74a3816215b93be86d51",
+                    "submitter":[
+                        "alice",
+                        "bob"
+                    ],
+                    "approver":"anonymous"
+                }
+            },
+            "previousCompletedBuild":{
+                "artifacts":{
+                    "result.xml":{
+                        "archive":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/artifact/result.xml"
+                    }
+                },
+                "fullUrl":"http://127.0.0.1:8080/jenkins/job/folder/job/artifacts_test/2/",
+                "number":2,
+                "queueId":1,
+                "phase":"COMPLETED",
+                "timestamp":1583995539686,
+                "status":"UNSTABLE",
+                "url":"job/folder/job/artifacts_test/2/",
+                "testSummary":{
+                    "total":3,
+                    "failed":1,
+                    "passed":2,
+                    "skipped":0,
+                    "failedTests":[
+                        "foo3.AFailingTest"
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
+
