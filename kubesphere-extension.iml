@@ -38,8 +38,6 @@
     <orderEntry type="library" name="Maven: com.jcraft:jsch:0.1.54" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:apache-httpcomponents-client-4-api:4.5.3-2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.3" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:fluent-hc:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient-cache:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.jenkins-ci.plugins:ssh-credentials:1.13" level="project" />
@@ -203,6 +201,11 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.github.stefanbirkner:system-rules:1.19.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jenkins-ci.plugins:git:tests:3.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jenkins-ci.plugins:scm-api:tests:2.2.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.mashape.unirest:unirest-java:1.4.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.spotbugs:spotbugs-annotations:3.1.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
