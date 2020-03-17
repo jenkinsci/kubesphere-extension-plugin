@@ -60,3 +60,20 @@ unclassified:
           url: "http://127.0.0.1:30123/event/^${type}"
 ```
 
+## 3. Basic Header Auth with KubeSphere IAM
+
+This plugin extends [BasicHeaderAuthenticator](https://javadoc.jenkins.io/jenkins/security/BasicHeaderAuthenticator.html), 
+allowing users to request Jenkins' API through KubeSphere's API Token.
+
+
+Configure Basic Header Auth with CasC Plugin:
+
+```yaml
+unclassified:
+  kubespheretokenauthglobalconfiguration:
+    cacheConfiguration:  // enabel auth cache
+      size: 20  // cache size
+      ttl: 300 // cache object's ttl
+    enabled: true 
+    server: "http://127.0.0.1:30123/" // ks-apigateway url
+```
