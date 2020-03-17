@@ -1,0 +1,16 @@
+unclassified:
+  kubespheretokenauthglobalconfiguration:
+    cacheConfiguration:
+      size: 20
+      ttl: 300
+    enabled: true
+    server: "http://127.0.0.1:30123/"
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "1234"
+        - id: "user1"
+          password: ""

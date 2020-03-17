@@ -1,0 +1,16 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="Kubesphere Jenkins Auth">
+        <f:entry title="Enabled" field="enabled"
+                 description="Auth with kubesphere">
+            <f:checkbox/>
+        </f:entry>
+        <f:entry title="Server" field="server"
+                 description="Kubesphere API Gateway">
+            <f:textbox/>
+        </f:entry>
+    </f:section>
+    <f:validateButton title="Test Connection" method="verifyConnect"
+                      with="server" progress="Testing..."></f:validateButton>
+    <f:optionalProperty field="cacheConfiguration" title="${%Enable cacheConfiguration}"/>
+</j:jelly>
