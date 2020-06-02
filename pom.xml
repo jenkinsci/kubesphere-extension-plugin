@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.jenkins.kubesphere.plugins</groupId>
     <artifactId>kubesphere-extension</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <properties>
         <jenkins.version>2.164.1</jenkins.version>
@@ -45,6 +45,11 @@
             <id>soulseen</id>
             <name>zhuxiaoyang</name>
             <email>sunzhu@yunify.com</email>
+        </developer>
+        <developer>
+            <id>shaowenchen</id>
+            <name>shaowenchen</name>
+            <email>mail@chenshaowen.com</email>
         </developer>
     </developers>
     

@@ -132,7 +132,7 @@ public class KubesphereTokenAuthGlobalConfiguration extends GlobalConfiguration 
     }
 
     public String getRequestUrl() {
-        return serverToUrl(this.server) + "kapis/iam.kubesphere.io/v1alpha2/authenticate";
+        return serverToUrl(this.server) + "oauth/authenticate";
     }
 
 
