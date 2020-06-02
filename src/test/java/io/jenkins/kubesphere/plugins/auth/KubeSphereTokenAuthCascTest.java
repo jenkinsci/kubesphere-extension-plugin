@@ -34,7 +34,7 @@ public class KubeSphereTokenAuthCascTest {
     @Before
     public void prepareWireMock() throws Exception {
         webHook.stubFor(
-                post(urlMatching("/kapis/iam.kubesphere.io/v1alpha2/authenticate")).
+                post(urlMatching("/oauth/authenticate")).
                         withRequestBody(WireMock.containing("testToken"))
                         .willReturn(aResponse().withBody("{\n" +
                                 "    \"apiVersion\": \"authentication.k8s.io/v1beta1\",\n" +
@@ -64,7 +64,7 @@ public class KubeSphereTokenAuthCascTest {
         Assert.assertEquals(config.isEnabled(), true);
         Assert.assertEquals(config.getServer(), "http://127.0.0.1:30123/");
         Assert.assertEquals(config.getServerUrl(),"http://127.0.0.1:30123/");
-        Assert.assertEquals(config.getRequestUrl(),"http://127.0.0.1:30123/kapis/iam.kubesphere.io/v1alpha2/authenticate");
+        Assert.assertEquals(config.getRequestUrl(),"http://127.0.0.1:30123/oauth/authenticate");
     }
 
     @Test
