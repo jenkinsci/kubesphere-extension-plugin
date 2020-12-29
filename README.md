@@ -1,20 +1,19 @@
 # KubeSphere Extension Plugin
 
-
-KubeSphere is an enterprise-grade multi-tenant container management platform that built on Kubernetes.
+[KubeSphere](https://github.com/kubesphere/kubesphere/) is an enterprise-grade multi-tenant container management platform that built on Kubernetes.
 
 In the DevOps section we use Jenkins as our engine.
 
-This plugin will extend some of the features that kubesphere uses in Jenkins, such as adding event transitions, extending the Blueocan API, etc.
+This plugin will extend some of the features that KubeSphere uses in Jenkins, such as adding event transitions, 
+extending the [BlueOcean](https://github.com/jenkinsci/blueocean-plugin) API, etc.
 
-
-## 1. BlueOcean ContainerFilter is currently extended in the repository to implement specific API filtering.
+## 1. BlueOcean [ContainerFilter](https://github.com/jenkinsci/blueocean-plugin/blob/master/blueocean-rest-impl/src/test/java/io/jenkins/blueocean/service/embedded/ContainerFilterTest.java) is currently extended in the repository to implement specific API filtering.
 
 ## 2. KubeSphereNotification can send events inside Jenkins to different types of NotificationEndpoint.
 
 ### 2.1 NotificationEndpoint Type
 
-- WebHookNotificationEndpoint （Send POST request to push JSON data to http / https address.
+- WebHookNotificationEndpoint (Send POST request to push JSON data to http/https address).
 
 ### 2.2 Event Type
 
@@ -31,9 +30,9 @@ The following types of events are supported.
 
 If you want to know the specific structure of the event, please read [EventExample](EventExample.md)
 
-### 2.3 Configure plugin with CasC
+### 2.3 Configure the plugin with CasC
 
-You can configure this plugin using CasC.
+You can configure this plugin using [CasC](https://github.com/jenkinsci/configuration-as-code-plugin).
 Currently, the configuration of Event Custom Endpoint is still not supported.
 
 ```yaml
@@ -58,22 +57,4 @@ unclassified:
       - webHook:
           timeout: 300
           url: "http://127.0.0.1:30123/event/^${type}"
-```
-
-## 3. Basic Header Auth with KubeSphere IAM
-
-This plugin extends [BasicHeaderAuthenticator](https://javadoc.jenkins.io/jenkins/security/BasicHeaderAuthenticator.html), 
-allowing users to request Jenkins' API through KubeSphere's API Token.
-
-
-Configure Basic Header Auth with CasC Plugin:
-
-```yaml
-unclassified:
-  kubespheretokenauthglobalconfiguration:
-    cacheConfiguration:  // enabel auth cache
-      size: 20  // cache size
-      ttl: 300 // cache object's ttl
-    enabled: true 
-    server: "http://127.0.0.1:30123/" // ks-apigateway url
 ```
